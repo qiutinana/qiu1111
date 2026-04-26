@@ -305,22 +305,22 @@ export default {
 			line-height: 40px;
 			height: auto;
 
-			/deep/ .el-radio__input .el-radio__inner {
+			::v-deep .el-radio__input .el-radio__inner {
 				background: rgba(53, 53, 53, 0);
 				border-color: #666;
 			}
 
-			/deep/ .el-radio__input.is-checked .el-radio__inner {
+			::v-deep .el-radio__input.is-checked .el-radio__inner {
 				background: #1a3194;
 				border-color: #1a3194;
 			}
 
-			/deep/ .el-radio__label {
+			::v-deep .el-radio__label {
 				color: #666;
 				font-size: 16px;
 			}
 
-			/deep/ .el-radio__input.is-checked+.el-radio__label {
+			::v-deep .el-radio__input.is-checked+.el-radio__label {
 				color: #1a3194;
 				font-size: 16px;
 			}
