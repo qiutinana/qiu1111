@@ -1,0 +1,28 @@
+name: Build Vue Project
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js 16
+        uses: actions/setup-node@v4
+        with:
+          node-version: 16
+      - name: Install dependencies and replace node-sass
+        run: |
+          npm install --legacy-peer-deps
+          npm uninstall node-sass
+          npm install sass --save-dev
+      - name: Build
+        run: NODE_OPTIONS="--max_old_space_size=4096" npm run build
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-folder
+          path: dist
