@@ -19,20 +19,22 @@ jobs:
           npm install --legacy-peer-deps
           npm uninstall node-sass
           npm install sass --save-dev
-      - name: Build with verbose output
+      - name: Build with explicit output directory
         run: |
-          NODE_OPTIONS="--max_old_space_size=4096" npm run build --verbose
-      - name: List files after build
+          # 强制输出到 dist 目录
+          NODE_OPTIONS="--max_old_space_size=4096" npx vue-cli-service build --dest dist
+      - name: Verify dist directory exists
         run: |
-          echo "=== Current directory ==="
-          ls -la
-          echo "=== Looking for dist/app directories ==="
-          find . -type d \( -name "dist" -o -name "app" \) -print
-          echo "=== Looking for built files in src/ ==="
-          find src -type f -name "*.js" -o -name "*.css" | head -10
-      - name: Upload artifact (if app exists)
+          if [ -d "dist" ]; then
+            echo "✅ dist directory found"
+            ls -la dist
+          else
+            echo "❌ dist directory not found"
+            # 尝试查找任何可能存在的构建输出
+            find . -type d -name "dist" -o -name "app" -o -name "build" | head -10
+          fi
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: app-folder
-          path: app
-          if-no-files-found: warn
+          path: dist
