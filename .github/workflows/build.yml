@@ -19,15 +19,20 @@ jobs:
           npm install --legacy-peer-deps
           npm uninstall node-sass
           npm install sass --save-dev
-      - name: Build
-        run: NODE_OPTIONS="--max_old_space_size=4096" npm run build
-      - name: List files in current directory
-        run: ls -la
-      - name: List files in app directory if exists
+      - name: Build with verbose output
         run: |
-          if [ -d "app" ]; then ls -la app; else echo "app directory not found"; fi
-      - name: Upload artifact
+          NODE_OPTIONS="--max_old_space_size=4096" npm run build --verbose
+      - name: List files after build
+        run: |
+          echo "=== Current directory ==="
+          ls -la
+          echo "=== Looking for dist/app directories ==="
+          find . -type d \( -name "dist" -o -name "app" \) -print
+          echo "=== Looking for built files in src/ ==="
+          find src -type f -name "*.js" -o -name "*.css" | head -10
+      - name: Upload artifact (if app exists)
         uses: actions/upload-artifact@v4
         with:
           name: app-folder
-          path: app   
+          path: app
+          if-no-files-found: warn
