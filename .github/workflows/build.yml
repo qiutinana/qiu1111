@@ -21,8 +21,13 @@ jobs:
           npm install sass --save-dev
       - name: Build
         run: NODE_OPTIONS="--max_old_space_size=4096" npm run build
+      - name: List files in current directory
+        run: ls -la
+      - name: List files in app directory if exists
+        run: |
+          if [ -d "app" ]; then ls -la app; else echo "app directory not found"; fi
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: app-folder
-          path: app
+          path: app   
